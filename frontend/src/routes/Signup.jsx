@@ -1,13 +1,26 @@
 import TextInput from "../components/TextInput";
+import PasswordInput from "../components/PasswordInput";
 import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {makeUnauthenticatedPOSTRequest} from '../utils/serverHelpers';
 export function Signup () {
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [email, setEmail] =useState("");
+    const [username, setUsername] =useState("");
+    const navigate = useNavigate();
 
     const signUp = async() => {
+        const data = {firstName, lastName, username, password}
+        const response = await makeUnauthenticatedPOSTRequest("/api/v1/user/signup", data);
+
+        if (response && !response.err){
+            const token = response.token;
+            localStorage.setItem('token', token);
+            navigate("/dashboard");
+        }else{
+            alert("Failure");
+        }
         return ;
     }
 
@@ -18,8 +31,8 @@ export function Signup () {
                 <div className="my-2 text-gray-500">Enter your information to create an account</div>
                 <TextInput label="First Name" placeholder="John" className="my-2" value={firstName} setValue={setFirstName}/>
                 <TextInput label="Last Name" placeholder="Doe" className="my-2" value={lastName} setValue={setLastName}/>
-                <TextInput label="Email" placeholder="johndoe@example.com" className="my-2" value={email} setValue={setEmail}/>
-                <TextInput label="Password" placeholder="" className="my-2" value={password} setValue={setPassword}/>
+                <TextInput label="Username" placeholder="johndoe@example.com" className="my-2 mb-4" value={username} setValue={setUsername}/>
+                <PasswordInput label="Password" placeholder="" value={password} setValue={setPassword} />
                 <div className="w-full flex items-center justify-end my-4">
                     <button className="w-full font-semibold bg-black p-3 px-10 rounded-lg text-white" onClick={(e)=> {e.preventDefault(); signUp();}}>Sign Up</button>
                 </div>
