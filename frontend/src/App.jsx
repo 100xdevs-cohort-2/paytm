@@ -12,7 +12,7 @@ function App() {
   return (
         <div className="w-screen h-screen">
             <BrowserRouter>
-              {token ? (
+              {localStorage.getItem('token') ? (
                 <Routes>
                     <Route path="/dashboard" element={<Dashboard/>}/>
                     <Route path="*" element={<Dashboard/>}/>
