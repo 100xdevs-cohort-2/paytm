@@ -23,5 +23,14 @@ export const usersAtom = atom({
 export const currentAtom = atom({
     key: "currentAtom",
     default: ""
-})
+});
 
+export const modalAtom = atom({
+    key: "modalAtom",
+    default : false
+});
+
+export const usermodalAtom = atom({
+    key: "usermodalAtom",
+    default : {}
+});

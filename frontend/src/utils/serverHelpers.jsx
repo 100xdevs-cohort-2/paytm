@@ -14,10 +14,12 @@ export const makeUnauthenticatedPOSTRequest = async (route, body) => {
 };
 
 export const makeAuthenticatedPOSTRequest = async (route, body) => {
+    const token = localStorage.getItem('token');
     const response = await fetch(backendUrl+route, {
         method : "POST",
         headers : {
             "Content-Type" : "application/json",
+            Authorization : `Bearer ${token}`,
         },
         body : JSON.stringify(body),
     });

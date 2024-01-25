@@ -3,6 +3,7 @@ const router=express.Router();
 const {Account}=require("../db/db");
 const {authMiddleware} = require("../middleware/auth");
 const zod = require("zod");
+const mongoose = require("mongoose");
 
 router.get("/balance", authMiddleware, async(req, res) =>{
     const account = await Account.findOne({
