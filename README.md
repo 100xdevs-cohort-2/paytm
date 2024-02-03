@@ -18,10 +18,11 @@ Welcome to our Payments App, a robust and user-friendly platform designed for se
     ```
      docker build ./ -t mongodb:4.7-replset
      docker run --name mongodb -replset22 -p 27017:27017 -d mongodb:4.7-replset
-
-```
-3. Connect to the mongod compass
+    ```
+    
+3. Connect to the mongod compass   
 4. Install required dependencies
+   
    ```
    cd backend
    npm i
