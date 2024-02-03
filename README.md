@@ -13,11 +13,29 @@ Webpages made:
 </div>
 
 ## How to install locally?
+1. Fork and Clone this repository or Clone it using HTTPS/SSH
+   ```
+   git clone https://github.com/sreya22-git/paytm.git
+  ```
 
-1. Install Mongodb or build using Docker locally
+2. Install Mongodb or build using Docker locally
     ```
      docker build ./ -t mongodb:4.7-replset
      docker run --name mongodb -replset22 -p 27017:27017 -d mongodb:4.7-replset
-```
 
+```
+3. Connect to the mongod compass
+4. Install required dependencies
+   ```
+   cd backend
+   npm i
+   node index.js
+  
+   ```
+   ```
+    cd frontend
+    npm i
+    npm run dev
+   ```
+   
 
