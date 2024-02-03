@@ -12,8 +12,8 @@ Welcome to our Payments App, a robust and user-friendly platform designed for se
 1. Fork and Clone this repository or Clone it using HTTPS/SSH
    ```
    git clone https://github.com/sreya22-git/paytm.git
-  ```
-
+   
+   ```
 2. Install Mongodb or build using Docker locally
     ```
      docker build ./ -t mongodb:4.7-replset
