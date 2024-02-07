@@ -1,10 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-import JWT_SECRET from "../config";
-import { User } from "../db";
-const { authmiddleware } = require("../middleware");
+const app = express();
 
+const JWT_SECRET = require("../config");
+const { User } = require("../db");
+
+const { Account } = require("../db");
+const authmiddleware = require("../middleware");
+app.use(express.json());
 const zod = require("zod");
 const userschema = zod.object({
   firstname: zod.string(),
@@ -24,9 +28,10 @@ const Updateschema = zod.object({
   password: zod.string(),
 });
 
-router.use(express.json());
 router.post("/signup", async function (req, res) {
+  console.log("hi");
   const body = req.body;
+
   const parsedsucesss = userschema.safeParse(body);
   if (!parsedsucesss) {
     return res.status(411).json({
@@ -34,7 +39,7 @@ router.post("/signup", async function (req, res) {
     });
   }
 
-  const user = User.findfindOne({
+  const user = await User.findOne({
     username: req.body.username,
   });
   if (user) {
@@ -42,7 +47,13 @@ router.post("/signup", async function (req, res) {
       msg: "username already exist other username",
     });
   }
-  const dbuser = await User.create(body);
+
+  const dbuser = await User.create(req.body);
+
+  await Account.create({
+    userId: dbuser._id,
+    balance: 1 + Math.random() * 1000,
+  });
 
   const token = jwt.sign(
     {
@@ -66,29 +77,33 @@ router.post("/signin", async function (req, res) {
       msg: "enter valid ",
     });
   }
-  const user = await User.findfindOne({
+  const user = await User.findOne({
     username: req.body.username,
     password: req.body.password,
   });
 
-  if (!user) {
-    return res.status(411).json({
-      msg: " error while logging in",
+  if (user) {
+    // return res.status(411).json({
+    //   msg: " error while logging in",
+    // });
+    const token = jwt.sign(
+      {
+        userId: user._id,
+      },
+      JWT_SECRET
+    );
+    res.status(200).json({
+      msg: "success ",
+      token: token,
+    });
+  } else {
+    res.status(401).json({
+      msg: "enter the valid credientials",
     });
   }
-  const token = jwt.sign(
-    {
-      userId: user._id,
-    },
-    JWT_SECRET
-  );
-  res.status(200).json({
-    msg: "success ",
-    token: token,
-  });
 });
 
-route.put("/", authmiddleware, async function (req, res) {
+router.put("/update", authmiddleware, async function (req, res) {
   const parsedbody = Updateschema.safeParse(req.body);
   if (!parsedbody) {
     return res.status(401).json({
@@ -103,16 +118,18 @@ route.put("/", authmiddleware, async function (req, res) {
   });
 });
 
-route.get("/bulk", function (req, res) {
+router.get("/bulk", async function (req, res) {
   const filter = req.query.filter || "";
-  const users = User.findOne({
+  const users = await User.find({
     $or: [
       {
         firstname: {
-          $regix: filter,
+          $regex: filter,
         },
+      },
+      {
         lastname: {
-          $regix: filter,
+          $regex: filter,
         },
       },
     ],
@@ -120,14 +137,11 @@ route.get("/bulk", function (req, res) {
 
   res.json({
     user: users.map((user) => ({
-      username: user.userName,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      username: user.username,
+      firstName: user.firstname,
+      lastName: user.lastname,
       _id: user._id,
     })),
-  });
-  res.json({
-    users: users,
   });
 });
 

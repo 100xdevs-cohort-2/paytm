@@ -1,4 +1,5 @@
-import JWT_SECRET from "./config";
+// import JWT_SECRET from "./config";
+const JWT_SECRET = require("./config");
 const jwt = require("jsonwebtoken");
 
 const authmiddleware = (req, res, next) => {
@@ -10,19 +11,18 @@ const authmiddleware = (req, res, next) => {
     });
   }
 
-  const token = authheader.split(""[1]);
-
+  const token = authheader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    if (decoded.userId) {
-      req.userId = decoded.userId;
-      next();
-    } else {
-      return res.status(403).json({});
-    }
+    req.userId = decoded.userId;
+
+    next();
   } catch (err) {
-    return res.status(403).json({});
+    console.error("Error verifying the token:", err.message);
+    return res.status(403).json({
+      msg: "eror in header",
+    });
   }
 };
 module.exports = authmiddleware;
