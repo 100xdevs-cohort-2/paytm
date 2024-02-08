@@ -2,17 +2,18 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { Heading } from "../components/Header";
 import { InputBox } from "../components/input";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 export const SendMoney = () => {
-  // const [user, setUser] = useState({
-  //   firstname: "John",
-  //   lastname: "Doe",
-  //   _id: 1,
-  // });
   const [Searchparam] = useSearchParams();
   const id = Searchparam.get("id");
   const name = Searchparam.get("name");
+
+  const [money, setmoney] = useState(0);
+  const token = localStorage.getItem("token");
+  const completetoken = "Bearer " + token;
+  const navigate = useNavigate();
 
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
@@ -29,9 +30,32 @@ export const SendMoney = () => {
               <div>{name}</div>
             </div>
           </div>
-          <InputBox label={"Amount"} placeholder={"Enter Amount"} />
+          <InputBox
+            label={"Amount"}
+            placeholder={"Enter Amount"}
+            onChange={(e) => {
+              setmoney(e.target.value);
+            }}
+          />
           <div className="p-4">
-            <Button label={"Send Money"} />
+            <Button
+              label={"Send Money"}
+              onClick={async () => {
+                const res = await axios.post(
+                  "http://localhost:3000/api/v2/account/transfer",
+                  {
+                    amount: parseInt(money),
+                    to: id,
+                  },
+                  {
+                    headers: {
+                      authorization: completetoken,
+                    },
+                  }
+                );
+                navigate("/dashboard");
+              }}
+            />
           </div>
         </div>
       </div>
