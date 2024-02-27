@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-const { JWT_SECRET } = require("../config");
 const { Accounts } = require("../db");
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
@@ -27,10 +26,9 @@ router.post("/transfer", authMiddleware, async (req, res) => {
       message: "Invalid account",
     });
   }
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
-    const session = await mongoose.startSession();
-
-    session.startTransaction();
     const { amount, to } = req.body;
 
     const account = await Accounts.findOne({ userId: req.userId }).session(

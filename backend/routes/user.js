@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const { JWT_SECRET } = require("../config");
-const { User } = require("../db");
+const { User, Accounts } = require("../db");
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
 const { authMiddleware } = require("../middleware");
@@ -15,7 +15,6 @@ const signupBody = zod.object({
 
 router.post("/signup", async function (req, res) {
   const { success } = signupBody.safeParse(req.body);
-  console.log(req.body);
   if (!success) {
     return res.status(411).json({
       message: "Email already taken / Incorrect inputs",
@@ -34,7 +33,7 @@ router.post("/signup", async function (req, res) {
     password: req.body.password,
   });
   const userId = user._id;
-
+  console.log(userId);
   await Accounts.create({
     userId,
     balance: 1 + Math.random() * 10000,
