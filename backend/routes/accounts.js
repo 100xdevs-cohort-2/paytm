@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const { Accounts } = require("../db");
+const { Accounts, User } = require("../db");
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
 const { authMiddleware } = require("../middleware");
@@ -31,9 +31,9 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   try {
     const { amount, to } = req.body;
 
-    const account = await Accounts.findOne({ userId: req.userId }).session(
-      session
-    );
+    const account = await Accounts.findOne({
+      userId: req.userId,
+    }).session(session);
 
     if (!account || account.balance < amount) {
       await session.abortTransaction();
@@ -42,8 +42,10 @@ router.post("/transfer", authMiddleware, async (req, res) => {
       });
     }
 
-    const toAccount = await Accounts.findOne({ userId: to }).session(session);
-
+    const toUser = await User.findOne({ username: to }).session(session);
+    const toAccount = await Accounts.findOne({
+      userId: toUser._id,
+    }).session(session);
     if (!toAccount) {
       await session.abortTransaction();
       res.status(400).json({
@@ -56,15 +58,16 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     ).session(session);
 
     await Accounts.updateOne(
-      { userId: to },
+      { userId: toUser._id },
       { $inc: { balance: amount } }
     ).session(session);
     await session.commitTransaction();
     res.json({
       message: "Transfer successful",
     });
-  } catch {
+  } catch (e) {
     session.abortTransaction();
+    console.log(e);
     return res.status(400).json({
       message: "Transaction failed",
     });
