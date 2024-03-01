@@ -1,9 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { lazy } from "react";
-const Signup = lazy(() => import("./pages/Signup"));
-const Signin = lazy(() => import("./pages/Signin"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const SendMoney = lazy(() => import("./pages/SendMoney"));
+import { Signup } from "./pages/Signup";
+import { Signin } from "./pages/Signin";
+import { Dashboard } from "./pages/Dashboard";
+import { SendMoney } from "./pages/SendMoney";
 
 function App() {
   return (
