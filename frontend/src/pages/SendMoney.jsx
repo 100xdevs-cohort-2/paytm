@@ -1,4 +1,13 @@
+import axios from "axios";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 export const SendMoney = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const name = searchParams.get("name");
+  const [amount, setAmount] = useState(0);
+  console.log("Use State, type of Amount: " + typeof amount);
   return (
     <div class='flex justify-center h-screen bg-gray-100'>
       <div className='h-full flex flex-col justify-center'>
@@ -9,9 +18,9 @@ export const SendMoney = () => {
           <div class='p-6'>
             <div class='flex items-center space-x-4'>
               <div class='w-12 h-12 rounded-full bg-green-500 flex items-center justify-center'>
-                <span class='text-2xl text-white'>A</span>
+                <span class='text-2xl text-white'>{name[0].toUpperCase()}</span>
               </div>
-              <h3 class='text-2xl font-semibold'>Friend's Name</h3>
+              <h3 class='text-2xl font-semibold'>{name}</h3>
             </div>
             <div class='space-y-4'>
               <div class='space-y-2'>
@@ -22,13 +31,34 @@ export const SendMoney = () => {
                   Amount (in Rs)
                 </label>
                 <input
+                  onChange={(e) => {
+                    setAmount(parseInt(e.target.value));
+                  }}
                   type='number'
                   class='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm'
                   id='amount'
                   placeholder='Enter amount'
                 />
               </div>
-              <button class='justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white'>
+              <button
+                onClick={() => {
+                  console.log("Inside FE, type of Amount: " + typeof amount);
+                  axios.post(
+                    "http://localhost:3000/api/v1/account/transfer",
+                    {
+                      to: id,
+                      amount,
+                    },
+                    {
+                      headers: {
+                        Authorization:
+                          "Bearer " + localStorage.getItem("token"),
+                      },
+                    }
+                  );
+                }}
+                class='justify-center rounded-md text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-2 w-full bg-green-500 text-white'
+              >
                 Initiate Transfer
               </button>
             </div>
