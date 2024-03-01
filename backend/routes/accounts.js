@@ -16,10 +16,12 @@ router.get("/balance", authMiddleware, async (req, res) => {
 
 const transferBody = zod.object({
   to: zod.string(),
-  amount: zod.number(),
+  amount: zod.string(),
 });
 
 router.post("/transfer", authMiddleware, async (req, res) => {
+  console.log("Body: " + typeof req.body.amount);
+  console.log("Body: " + req.body.to);
   const { success } = transferBody.safeParse(req.body);
   if (!success) {
     return res.status(400).json({
@@ -30,7 +32,6 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   session.startTransaction();
   try {
     const { amount, to } = req.body;
-
     const account = await Accounts.findOne({
       userId: req.userId,
     }).session(session);
@@ -42,10 +43,11 @@ router.post("/transfer", authMiddleware, async (req, res) => {
       });
     }
 
-    const toUser = await User.findOne({ username: to }).session(session);
     const toAccount = await Accounts.findOne({
-      userId: toUser._id,
+      userId: to,
     }).session(session);
+    console.log("From Account: " + toAccount.userId);
+    console.log("sent userid: " + to);
     if (!toAccount) {
       await session.abortTransaction();
       res.status(400).json({
@@ -58,7 +60,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     ).session(session);
 
     await Accounts.updateOne(
-      { userId: toUser._id },
+      { userId: to },
       { $inc: { balance: amount } }
     ).session(session);
     await session.commitTransaction();

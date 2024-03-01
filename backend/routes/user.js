@@ -96,7 +96,7 @@ router.put("/", authMiddleware, async (req, res) => {
 });
 
 router.get("/bulk", authMiddleware, async (req, res) => {
-  const name = req.body.filter || "";
+  const filter = req.query.filter || "";
   //const users = await User.find().or([{ firstName: name }, { lastName: name }]);
   const users = await User.find({
     $or: [
