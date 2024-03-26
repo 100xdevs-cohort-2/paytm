@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Protected = ({ Component }) => {
+const Protected = ({ Component, authentication = true }) => {
   const navigate = useNavigate();
 
   const token = "Bearer " + localStorage.getItem("token");
@@ -13,10 +13,11 @@ const Protected = ({ Component }) => {
         authorization: token,
       },
     });
-    if (response.data.credential) {
-      navigate("/dashboard");
-    } else {
+    console.log(response.data.credential);
+    if (authentication && authentication !== response.data.credential) {
       navigate("/signup");
+    } else if (!authentication && authentication !== response.data.credential) {
+      navigate("/dashboard");
     }
   };
 

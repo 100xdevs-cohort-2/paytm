@@ -31,7 +31,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
 
     return res.status(400).json({
       msg: "Insufficent balance",
-    });
+    }); 
   }
 
   const toAccount = await Account.findOne({

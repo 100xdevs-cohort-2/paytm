@@ -16,7 +16,7 @@ const authMiddleware = (req, res, next) => {
   } catch (err) {
     return res.json({credential: false});
   }
-};
+}; 
 
 module.exports = {
   authMiddleware,
