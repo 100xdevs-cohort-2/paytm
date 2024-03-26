@@ -9,6 +9,8 @@ const { Account } = require("../db");
 
 const { authMiddleware } = require("../middleware");
 
+const withAuth = require("../midd2");
+
 const signupBody = zod.object({
   username: zod.string().email(),
   password: zod.string(),
@@ -39,7 +41,7 @@ router.post("/signup", async (req, res) => {
     password: req.body.password,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-  }); 
+  });
 
   const userId = user._id;
 
@@ -148,4 +150,9 @@ router.get("/bulk", async (req, res) => {
   });
 });
 
+router.get("/me", authMiddleware, (req, res) => {
+  res.json({
+    credential: true,
+  });
+});
 module.exports = router;

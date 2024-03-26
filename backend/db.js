@@ -8,7 +8,7 @@ mongoose.connect(
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    require: true,
+    require: true, 
     unique: true,
     trim: true,
     lowercase: true,

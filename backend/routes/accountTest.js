@@ -54,29 +54,13 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   await Account.updateOne(
     { userId: to },
     { $inc: { balance: amount } }
-  ).session(session);
+  ).session(session); 
 
-  session.commitTransaction();
+  session.commitTransaction(); 
 
-  // transfer({
-  //   userId: "65f879c17cdacddad126f567",
-  //   body: {
-  //     to: "65f879b17cdacddad126f562",
-  //     amount: 200,
-  //   },
-  // });
-
-  // transfer({
-  //   userId: "65f879c17cdacddad126f567",
-  //   body: {
-  //     to: "65f879b17cdacddad126f562",
-  //     amount: 200,
-  //   },
-  // });
-
-  res.status(200).json({
-    msg: "Transfer successful",
+  res.status(200).json({ 
+    msg: "Transfer successful",  
   });
-});
+}); 
 
-module.exports = router;
+module.exports = router; 
