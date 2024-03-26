@@ -10,7 +10,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/signup" element={<Protected2 Component={Signup} />} />
+          <Route path="/signup" element={<Protected Component={Signup} />} />
           <Route path="/signin" element={<Signin />} />
           <Route
             path="/dashboard"
