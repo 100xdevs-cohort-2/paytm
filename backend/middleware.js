@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(403).json({credential: false});
+    return res.json({credential: false});
   }
   const token = authHeader.split(" ")[1];
   try {
@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
     console.log(decoded)
     next();
   } catch (err) {
-    return res.status(403).json({credential: false});
+    return res.json({credential: false});
   }
 };
 
