@@ -4,7 +4,6 @@ import axios from "axios";
 
 const Protected = ({ Component, authentication = true }) => {
   const navigate = useNavigate();
-
   const token = "Bearer " + localStorage.getItem("token");
 
   const sendBack = async () => {
@@ -13,10 +12,14 @@ const Protected = ({ Component, authentication = true }) => {
         authorization: token,
       },
     });
+
     console.log(response.data.credential);
+    // console.log(authentication);
+
     if (authentication && authentication !== response.data.credential) {
       navigate("/signup");
     } else if (!authentication && authentication !== response.data.credential) {
+      console.log(authentication);
       navigate("/dashboard");
     }
   };
@@ -25,7 +28,6 @@ const Protected = ({ Component, authentication = true }) => {
     sendBack();
   }, []);
 
-  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjAyNzMyMTIzYTZlM2Y2MTAzODYzNTEiLCJpYXQiOjE3MTE0MzY1Nzd9.SiPYx8ptv0DS-FyGQkoNF_a7hHl0D36xmJY8TK9m100
   return (
     <>
       <div>

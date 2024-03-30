@@ -7,7 +7,6 @@ import PageInputBox from "./PageInputBox";
 import Button from "./Button";
 import BottomWarn from "./BottomWarn";
 
-// const cookieParser = require("cookies-")
 
 import Axios from "axios";
 
@@ -70,7 +69,6 @@ const Signup = () => {
                   }
                 );
                 localStorage.setItem("token", response.data.token);
-                // cookies.set("token", response.data.token);
                 navigate("/dashboard");
               }}
             />

@@ -9,8 +9,6 @@ const { Account } = require("../db");
 
 const { authMiddleware } = require("../middleware");
 
-const withAuth = require("../midd2");
-
 const signupBody = zod.object({
   username: zod.string().email(),
   password: zod.string(),

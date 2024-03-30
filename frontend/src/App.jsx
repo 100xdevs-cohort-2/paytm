@@ -14,12 +14,18 @@ function App() {
             path="/signup"
             element={<Protected Component={Signup} authentication={false} />}
           />
-          <Route path="/signin" element={<Signin />} />
+          <Route
+            path="/signin"
+            element={<Protected Component={Signin} authentication={false} />}
+          />
           <Route
             path="/dashboard"
             element={<Protected Component={Dashboard} />}
           />
-          <Route path="/send" element={<Protected Component={SendMoney} />} />
+          <Route
+            path="/send"
+            element={<Protected Component={SendMoney} />}
+          />
         </Routes>
       </BrowserRouter>
     </>

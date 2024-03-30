@@ -20,6 +20,7 @@ const SendMoney = () => {
         <div className="flex flex-col pt-10 gap-1">
           <div className="flex gap-3">
             <div className="border rounded-xl px-2 border-black text-xl bg-slate-700 text-white">
+              {/* {friendName >= 2 ? friendName[0] : "A"} */}
               {friendName[0]}
             </div>
             <div>{friendName}</div>
@@ -42,7 +43,7 @@ const SendMoney = () => {
                 },
                 {
                   headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
+                    authorization: "Bearer " + localStorage.getItem("token"),
                   },
                 }
               )
