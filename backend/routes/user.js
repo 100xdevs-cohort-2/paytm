@@ -128,16 +128,14 @@ router.get("/bulk", async (req, res) => {
                 "$regex": filter
             }
         }]
+    },{
+	username: 1,
+        firstName: 1,
+        lastName: 1,
+        _id: 1
     })
 
-    res.json({
-        user: users.map(user => ({
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            _id: user._id
-        }))
-    })
+    res.json(users)
 })
 
 module.exports = router;
