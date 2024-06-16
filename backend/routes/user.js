@@ -106,9 +106,9 @@ router.put("/", authMiddleware, async (req, res) => {
         })
     }
 
-    await User.updateOne(req.body, {
-        id: req.userId
-    })
+    await User.updateOne({ _id: req.userId},
+    req.body
+  );
 
     res.json({
         message: "Updated successfully"
