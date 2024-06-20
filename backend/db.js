@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 
 mongoose.connect("mongodb+srv://admin:baivab2002@cluster0.ezuvzvl.mongodb.net/paytm")
-.then(() => {
-    console.log('Database connection successful');
-  }).catch((err) => {
-    console.error('Database connection error:', err);
-  });
+.then(() => { console.log('Database connection successful'); }).catch((err) => {
+console.error('Database connection error:', err);
+});
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -37,6 +35,24 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model("users",UserSchema);
+const accountSchema = new mongoose.Schema({
 
-module.exports = User;
+    userId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "User",
+        retuired: true
+    },
+
+    balance: {
+        type: Number,
+        required: true
+    }
+})
+
+const User = mongoose.model("users",UserSchema);
+const Account = mongoose.model("accounts", accountSchema);
+
+module.exports = {
+    User,
+    Account
+};

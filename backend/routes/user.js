@@ -3,10 +3,11 @@ const zod = require("zod");
 const User = require("../db");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = require("../config");
+const authMiddleware = require("../middleware");
 
-router = express.Router();
+router = express.Router(); //api/v1/user
 
-const validUserSchema = zod.object({
+const validUserSchema = zod.object({  //function to make sure that the data received is clean. zod validation
     username: zod.string()
         .min(3, { message: "Username must be at least 3 characters long" })
         .max(20, { message: "Username must be at most 20 characters long" })
@@ -28,9 +29,29 @@ const validUserSchema = zod.object({
         .max(30, { message: "Last name must be at most 30 characters long" })
 });
 
-router.post("/signup", async (req,res) => {
-    console.log("something got hit");
-    console.log(req.body);
+const updateUserSchema = zod.object({
+    password: zod.string()
+        .min(3, { message: "Password must be at least 3 characters long" })
+        .max(20, { message: "Password must be at most 20 characters long" })
+        .trim()
+        .optional(),
+
+    firstName: zod.string()
+        .trim()
+        .min(1, { message: "First name is required" })
+        .max(30, { message: "First name must be at most 30 characters long" })
+        .optional(),
+
+    lastName: zod.string()
+        .min(1, { message: "Last name is required" })
+        .trim()
+        .max(30, { message: "Last name must be at most 30 characters long" })
+        .optional()
+});
+
+
+router.post("/signup", async (req,res) => {  //? receiving the data then cleaning with the validation check and sending it to the database if uniue.
+
     const validationResult = validUserSchema.safeParse(req.body);
     if (!validationResult.success) {
         return res.json({
@@ -67,9 +88,39 @@ router.post("/signup", async (req,res) => {
     
 });
 
-router.get("/signup",(req,res) =>{
-    res.send("get works fine");
+router.put('/',authMiddleware,async (req,res) => {
+    const validationResult = updateUserSchema.safeParse(req.body);
+    if (!validationResult.success){
+        return res.status(400).json({message: "invalid input"});
+    }
+    await User.updateOne({_id: req.userId}, req.body);
+    res.json({
+        message: "updated successfully"
+    })
 })
+
+router.get("/bulk",async (req,res)=>{
+    const data = req.query.filter || "";
+    const users = await User.find({
+        $or: [
+            {firstName: {"$regex" : data}},
+            {lastName: {"$regex" : data}}
+        ]
+    });
+    console.log(users);
+    res.json({
+        user : users.map(user => ({
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
+    })
+})
+
+// router.get("/signup",(req,res) =>{
+//     res.send("get works fine");
+// })
 
 
 module.exports = router;
