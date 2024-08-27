@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { connectToMongoDb } = require("./config");
 const userRoute = require("./routes/user");
+const bankRoute = require("./routes/bank");
 const app = express();
 
 const CONNECTION_URL = process.env.MONGODB_CONNECTION_URL;
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/account", bankRoute);
 
 connectToMongoDb(CONNECTION_URL)
     .then(() => {
