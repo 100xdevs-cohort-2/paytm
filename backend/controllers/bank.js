@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const Account = require("../models/bank");
 
 async function handleGetBalance(req, res) {
@@ -53,7 +54,7 @@ async function handleTransfer(req, res) {
     });
 };
 
-modules.export = {
+module.exports = {
     handleGetBalance,
     handleTransfer
 }

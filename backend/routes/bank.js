@@ -5,6 +5,6 @@ const { handleGetBalance, handleTransfer } = require("../controllers/bank");
 const bankRoute = express.Router();
 
 bankRoute.get("/balance", authMiddleware, handleGetBalance)
-bankRoute.get("/transfer", authMiddleware, handleTransfer)
+bankRoute.post("/transfer", authMiddleware, handleTransfer)
 
 module.exports = bankRoute;
