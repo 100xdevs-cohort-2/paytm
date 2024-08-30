@@ -119,26 +119,22 @@ async function filterUsers(req, res) {
     const filter = req.query.filter || "";
 
     const users = await User.find({
-        $or: [{
-            firstName: {
-                "$regex": filter
-            }
-        }, {
-            lastName: {
-                "$regex": filter
-            }
-        }]
-    })
+        $or: [
+            { firstname: { "$regex": filter, "$options": "i" } },
+            { lastname: { "$regex": filter, "$options": "i" } }
+        ]
+    });
 
     res.json({
         user: users.map(user => ({
+            id: user._id,
             username: user.username,
             firstName: user.firstname,
             lastName: user.lastname,
-            _id: user._id
         }))
-    })
+    });
 }
+
 
 module.exports = {
     handleUserSignUp,
