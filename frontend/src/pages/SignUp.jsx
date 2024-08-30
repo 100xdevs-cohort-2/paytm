@@ -28,7 +28,7 @@ export const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/user/signup", formData);
+      const response = await axios.post("https://paytm-backend.shreyas.info/api/v1/user/signup", formData);
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (error) {
