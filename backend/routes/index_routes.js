@@ -12,4 +12,5 @@ router.use("/update",updateinfo)
 router.use("/alluser",Userquery)
 router.use("/account",account)
 
+
 module.exports = router;

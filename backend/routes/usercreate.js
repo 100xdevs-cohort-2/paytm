@@ -6,7 +6,8 @@ require('dotenv').config()
 const jwtpass = process.env.JWT_SEC
 const jwt = require("jsonwebtoken")
 const bcrypt  = require("bcrypt")
-const {Balance} = require("../db")
+const {Balance} = require("../db");
+const authvalidator = require('../middlewere');
 
 
 
@@ -38,13 +39,11 @@ return jwt.sign(args,jwtpass)
 
 }
 
-router.get('/users', async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json({ msg: 'Error fetching users', error: err });
-  }
+router.get("/getuser", authvalidator, async (req, res) => {
+  const user = await User.findOne({
+    _id: req.userId,
+  });
+  res.json(user);
 });
 
 // Create a user
