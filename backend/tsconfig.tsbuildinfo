@@ -1,0 +1,1 @@
+{"root":["./src/ienv.ts","./src/connect.ts","./src/index.ts","./src/controllers/authcontroller.ts","./src/models/user.ts","./src/routes/accountroutes.ts","./src/routes/authroutes.ts","./src/routes/mainroutes.ts"],"version":"5.8.3"}
