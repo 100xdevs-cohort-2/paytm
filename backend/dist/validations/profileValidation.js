@@ -22,7 +22,7 @@ const ProfileValidation = {
                 "string.min": "Last name must at least of 8 characters long",
                 "string.max": "Last name mustnot exceed 50 characters long"
             })
-        })
+        }).or("password", "firstName", "lastName")
     }
 };
 exports.default = ProfileValidation;
