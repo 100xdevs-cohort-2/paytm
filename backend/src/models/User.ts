@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose"
 
 
-interface IUser{
+export interface IUser{
     username:string,
     password:string,
     firstName:string,
