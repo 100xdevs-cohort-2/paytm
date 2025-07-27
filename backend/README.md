@@ -1,0 +1,1 @@
+node --env-file=.env db.js #to pass the env file
