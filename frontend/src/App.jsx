@@ -1,11 +1,12 @@
+import Navbar from "./components/ui/Navbar";
+import Dashboard from "./components/pages/dashboard/Dashboard.page";
 
 function App() {
-
   return (
-    <div>
-        Hello world
-    </div>
-  )
+    <>
+       <Dashboard/>
+    </>
+  );
 }
 
-export default App
+export default App;
